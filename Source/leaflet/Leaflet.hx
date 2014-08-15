@@ -9,11 +9,6 @@
 
 package leaflet;
 
-import leaflet.Util;
-import leaflet.Point;
-import leaflet.Bounds;
-import leaflet.LatLng;
-
 class L {
 
     public function new () {
@@ -29,10 +24,10 @@ class L {
             return x;
         }
          if (Type.getClassName(Type.getClass(x)) == 'Array') {
-            return new Point(x[0], x[1]);
+            return new leaflet.Point(x[0], x[1]);
         }
         if (y != null) {
-            return new Point(x, y, round);
+            return new leaflet.Point(x, y, round);
         }
         return x;
     }
@@ -42,10 +37,10 @@ class L {
             return a;
         }
          if (Type.getClassName(Type.getClass(a)) == 'Array') {
-            return new  LatLng(a[0], a[1]);
+            return new  leaflet.LatLng(a[0], a[1]);
         }
         if (b != null) {
-            return new LatLng(a, b);
+            return new leaflet.LatLng(a, b);
         }
         return a;
     }
@@ -55,14 +50,14 @@ class L {
             Type.getClassName(Type.getClass(a)) == 'leaflet.Bounds') {
             return a;
         }
-        return new Bounds(a, b);
+        return new leaflet.Bounds(a, b);
     }
-    
-    public static function bounds (a:Dynamic, ?b:Point) {
+
+    public static function latLngBounds (a:Dynamic, ?b:LatLng) {
         if (a == null || 
-            Type.getClassName(Type.getClass(a)) == 'leaflet.Bounds') {
+            Type.getClassName(Type.getClass(a)) == 'leaflet.LatLngBounds') {
             return a;
         }
-        return new Bounds(a, b);
+        return new leaflet.LatLngBounds(a, b);
     }
 }

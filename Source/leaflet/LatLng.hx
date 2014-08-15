@@ -36,7 +36,7 @@ class LatLng {
         return margin <= this.MAX_MARGIN;
     }
 
-    public function toString (precision) {
+    public function toString (?precision) {
         return 'LatLng(' +
             Std.string(this.lat) + ', ' +
             Std.string(this.lng) + ')';
