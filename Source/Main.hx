@@ -5,6 +5,7 @@ import openfl.display.Sprite;
 import leaflet.Leaflet;
 import leaflet.Point;
 import leaflet.Bounds;
+import leaflet.Projection;
 
 class Main extends Sprite {
 	
