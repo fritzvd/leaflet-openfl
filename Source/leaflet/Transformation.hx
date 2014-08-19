@@ -19,18 +19,18 @@ class Transformation {
         this._d = d;
     }
 
-    public function transform (point:Point, scale) {
+    public function transform (point:Point, scale:Float) {
         return this._transform(point.clone(), scale);
     }
 
-    public function _transform (point:Point, scale) {
+    public function _transform (point:Point, scale:Float) {
         scale = if (scale != null) scale else 1;
         point.x = scale * (this._a * point.x + this._b);
         point.y = scale * (this._c * point.y + this._d);
         return point;
     }
 
-    public function untransform (point:Point, scale) {
+    public function untransform (point:Point, scale:Float) {
         scale = if (scale != null) scale else 1;
         return new Point(
             (point.x / scale - this._b) / this._a,

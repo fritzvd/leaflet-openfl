@@ -5,18 +5,17 @@
 
 package leaflet;
 
-import leaflet.Leaflet;
 import leaflet.LatLng;
 import leaflet.Point;
 
 class Projection {
 
     public static function project (latlng:LatLng) {
-        return new L.Point(latlng.lng, latlng.lat);
+        return new Point(latlng.lng, latlng.lat);
     }
 
     public static function unproject (point) {
-        return new L.LatLng(point.y, point.x);
+        return new LatLng(point.y, point.x);
     }
 
 }
