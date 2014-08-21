@@ -9,10 +9,11 @@
 
 package leaflet;
 
+import leaflet.Events;
+
 class L {
 
     public function new () {
-
     }
  
     public function extend(dest, org) {
