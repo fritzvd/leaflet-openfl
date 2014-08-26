@@ -1,9 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <project>
 	
-	<meta title="Leaflethx" package="com.example.leaflethx" version="1.0.0" company="Company Name" />
-	<app main="Main" path="Export" file="Leaflethx" />
+	<meta title="Leaflethx" package="com.fritzvd.leaflet" version="1.0.0" company="The Incredulous Whale of Morrrow" />
+	<app main="Main" path="Export" file="LeafletOpenFL" />
 	
+	<!-- <window fullscreen="true"/> -->
+	<window width="0" height="0" if="mobile" />
+	<window width="1024" height="640" resizable="true" unless="mobile" />
+
 	<source path="Source" />
 	
 	<haxelib name="openfl" />

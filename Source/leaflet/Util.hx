@@ -17,16 +17,14 @@ class Util {
         }
     }
 
-    inline public function stamp () {
+    static public function stamp (obj:Map<String, Dynamic>, lastId) {
         var key = '_leaflet_id';
-        return function (obj:Map<String, Dynamic>) {
-            if (obj[key] != null) {
-                obj[key] = obj[key];
-            } else  {
-                 obj[key] = ++lastId;
-            }
-            return obj[key];
+        if (obj[key] != null) {
+            obj[key] = obj[key];
+        } else  {
+             obj[key] = ++lastId;
         }
+        return obj[key];
     }
 
     

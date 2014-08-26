@@ -60,8 +60,8 @@ class LatLng {
     public function wrap (a, b) {
         var lng = this.lng;
 
-        a = if (a != null) a else -180;
-        b = if (b != null) b else 180;
+        // a = if (a != null) a else -180;
+        // b = if (b != null) b else 180;
         var plusThis:Float; 
         if (lng < a || lng == b) {
             plusThis = b;
