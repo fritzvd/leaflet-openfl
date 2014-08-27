@@ -87,7 +87,7 @@ class Point {
         return Math.sqrt(x * x + y * y);
     }
 
-    public function equals (point) {
+    public function equals (point:Point) {
         point = L.point(point);
 
         return point.x == this.x && 

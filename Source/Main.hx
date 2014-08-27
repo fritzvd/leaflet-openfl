@@ -1,5 +1,7 @@
 package;
 
+// import com.haxepunk.HXP;
+// import com.haxepunk.Engine;
 
 import openfl.display.Sprite;
 import openfl.system.Capabilities;
@@ -15,13 +17,13 @@ class Main extends Sprite {
 	public function new () {
 		
 		super ();
-		trace(stage.getBounds(stage), stage.width);
-		trace(Capabilities.screenResolutionX, Capabilities.screenResolutionY);
+		trace(stage.stageWidth, stage.stageHeight);
+		trace(Capabilities.screenResolutionX, Capabilities.screenResolutionY, stage);
 		var l = new L();
 		var lB = new Bounds([new Point(3.0,4.0), new Point(5.0, 9.0)]);
 		var lC = new Point(3.5, 6.0);
 		// trace(lB.intersects(lB));
-		// var mappo = new LMap();
+		var mappo = new LMap(this);
         // L.point([1,2]);
 	}
 

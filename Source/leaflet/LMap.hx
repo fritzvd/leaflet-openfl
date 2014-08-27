@@ -2,7 +2,7 @@
 package leaflet;
 
 import leaflet.Leaflet;
-// import openfl.display.Stage;
+import openfl.display.Sprite;
 import leaflet.LatLng;
 import leaflet.Point;
 import leaflet.Bounds;
@@ -23,16 +23,20 @@ class LMap {
     private var _size:Point;
     private var _panes:Dynamic;
     private var _initialLeftPoint:Int;
+    private var _initialTopLeftPoint:Point;
     private var _initialCenter:Point;
+    private var _sprite:Sprite;
 
-    public function new (?crs:Dynamic) {
+    public function new (sprite, ?crs:Dynamic) {
+        _sprite = sprite;
         events = new Events();
         if (crs == null) {
             _crs = new Simple();
         } else {
             _crs = crs;
         }
-
+        _size = new Point (sprite.stage.stageHeight, sprite.stage.stageWidth);
+        trace(_size);
         _initialCenter = new Point(0,0);
     }
 
@@ -62,15 +66,15 @@ class LMap {
         return setZoom(_zoom - (delta));
     }
 
-    public function setZoomAround (latlng, zoom:Int) {
-        var containerPoint;
+    public function setZoomAround (latlng:LatLng, zoom:Int) {
+        var containerPoint:Point;
         var scale = getZoomScale(zoom);
         var viewHalf = getSize().divideBy(2);
-        if (Type.getClassName(Type.getClass(latlng)) == 'leaflet.Point') {
-            containerPoint = latlng;
-        } else {
+        // if (Type.getClassName(Type.getClass(latlng)) == 'leaflet.Point') {
+        //     containerPoint = latlng;
+        // } else {
             containerPoint = latLngToContainerPoint(latlng);
-        }
+        // }
         var centerOffset = containerPoint
             .subtract(viewHalf).multiplyBy(1 - 1 / scale);
         var newCenter = containerPointToLatLng(viewHalf.add(centerOffset));
@@ -105,7 +109,7 @@ class LMap {
     }
 
     public function setMaxBounds (bounds) {
-        bounds = L.latLngBounds(bounds);
+        bounds = L.bounds(bounds);
         _maxBounds = bounds;
 
         if (bounds == null) {
@@ -113,7 +117,8 @@ class LMap {
         }
 
         if (_loaded) {
-            _panInsideMaxBounds();
+            events.dispatchEvent(new Event('moveend'));
+
         }
 
         return events.addEventListener('moveend', _panInsideMaxBounds);
@@ -124,6 +129,8 @@ class LMap {
         var newCenter = _limitCenter(center, _zoom, bounds);
 
         if (center.equals(newCenter)) { return this; }
+
+        return panTo(newCenter);
     }
 
     public function addLayer (layer) {
@@ -146,7 +153,7 @@ class LMap {
         if (_layers[id] == null) { return this; }
         
         if (_loaded) {
-            layer.onRemove(this);
+            // layer.onRemove(this);
         }
 
         return this;
@@ -155,22 +162,26 @@ class LMap {
     public function hasLayer (layer) {
         if (layer == null) { return false; }
         var id = Util.stamp(layer, _lastId);
-        return s_layers.exists(Std.string(id));
+        return _layers.exists(Std.string(id));
     }
 
     public function invalidateSize (options) {
 
     }
 
-    private function _panInsideMaxBounds() {
+    private function _panInsideMaxBounds (e) {
         //
+        return e;
     }
 
     private function _limitCenter (center, zoom, bounds) {
-        //
+        return center;
     }
 
     public function getCenter () {
+        if (_initialCenter == null) {
+            _initialCenter = new Point(0.0, 0.0);
+        }
         return _initialCenter;
     }
 
@@ -210,7 +221,7 @@ class LMap {
     }
 
     public function getPixelBounds () {
-        var topLeftPoint = _topLeftPoint();
+        var topLeftPoint = _getTopLeftPoint();
         return L.bounds(topLeftPoint, topLeftPoint.add(getSize()));
     }
 
@@ -227,12 +238,19 @@ class LMap {
         
     }
 
-    public function _rawPanBy () {
+    public function _rawPanBy (point) {
         
     }
 
     public function _limitZoom (zoom) {
         return zoom;
+    }
+
+    public function _checkIfLoaded () {
+        if (_loaded != true) {
+            // break;
+            // throw new haxe.macro.Expr.Error('not loaded', 'here');
+        }
     }
 
 
@@ -255,11 +273,12 @@ class LMap {
         return unproject(point);
     }
 
-    public function latLngToLayerPoint (latlng) {
+    public function latLngToLayerPoint (latlng){
         var projectedPoint = project(L.latLng(latlng))._round();
+        return projectedPoint;
     }
 
-    public function layerPointToContainerPoint (point) {
+    public function layerPointToContainerPoint (point:Point) {
         return L.point(point).subtract(_getMapPanePos());
     }
 
@@ -273,6 +292,10 @@ class LMap {
     }
 
     public function _getMapPanePos () {
+        return new Point(0,0);
+    }
+
+    public function _getTopLeftPoint () {
         return new Point(0,0);
     }
 
