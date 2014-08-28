@@ -24,7 +24,7 @@ class LMap {
     private var _panes:Dynamic;
     private var _initialLeftPoint:Int;
     private var _initialTopLeftPoint:Point;
-    private var _initialCenter:Point;
+    private var _initialCenter:LatLng;
     private var _sprite:Sprite;
 
     public function new (sprite, ?crs:Dynamic) {
@@ -37,10 +37,10 @@ class LMap {
         }
         _size = new Point (sprite.stage.stageHeight, sprite.stage.stageWidth);
         trace(_size);
-        _initialCenter = new Point(0,0);
+        _initialCenter = new LatLng(0,0);
     }
 
-    public function setView (center:Point, ?zoom) {
+    public function setView (center:LatLng, ?zoom) {
         if (zoom == null) {
             zoom = this.getZoom();
         }
@@ -125,7 +125,7 @@ class LMap {
     }
 
     public function panInsideBounds (bounds) {
-        var center:Point = getCenter();
+        var center:LatLng = getCenter();
         var newCenter = _limitCenter(center, _zoom, bounds);
 
         if (center.equals(newCenter)) { return this; }
@@ -180,7 +180,7 @@ class LMap {
 
     public function getCenter () {
         if (_initialCenter == null) {
-            _initialCenter = new Point(0.0, 0.0);
+            _initialCenter = new LatLng(0.0, 0.0);
         }
         return _initialCenter;
     }
@@ -234,8 +234,16 @@ class LMap {
         return _panes;
     }
 
-    public function _resetView (latlng, ?zoom) {
-        
+    public function _resetView (center, zoom) {
+        if (zoom != _zoom) {
+            var zoomChanged = true;
+        } else { var zoomChanged = false; }
+
+        _zoom = zoom;
+        _initialCenter = center;
+        _initialTopLeftPoint = _getNewTopLeftPoint(center, zoom);
+
+
     }
 
     public function _rawPanBy (point) {
@@ -288,7 +296,8 @@ class LMap {
     }
 
     public function containerPointToLatLng (point) {
-        return L.point(point).subtract(_getMapPanePos());
+        var layerPoint = L.point(point).subtract(_getMapPanePos());
+        return layerPointToLatLng(layerPoint);
     }
 
     public function _getMapPanePos () {
@@ -297,6 +306,11 @@ class LMap {
 
     public function _getTopLeftPoint () {
         return new Point(0,0);
+    }
+
+    public function _getNewTopLeftPoint (center, zoom) {
+        var viewHalf = getSize()._divideBy(2);
+        return project(center, zoom)._subtract(viewHalf)._round();
     }
 
 }
