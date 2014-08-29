@@ -26,6 +26,8 @@ class LMap {
     private var _initialTopLeftPoint:Point;
     private var _initialCenter:LatLng;
     private var _sprite:Sprite;
+    private var _tileLayersNum:Int = 0;
+    private var _tileLayersToLoad:Int;
 
     public function new (sprite, ?crs:Dynamic) {
         _sprite = sprite;
@@ -36,8 +38,8 @@ class LMap {
             _crs = crs;
         }
         _size = new Point (sprite.stage.stageHeight, sprite.stage.stageWidth);
-        trace(_size);
         _initialCenter = new LatLng(0,0);
+        _zoom = 8;
     }
 
     public function setView (center:LatLng, ?zoom) {
@@ -234,6 +236,10 @@ class LMap {
         return _panes;
     }
 
+    public function _layerAdd (layer:Dynamic) {
+        //
+    }
+
     public function _resetView (center, zoom) {
         if (zoom != _zoom) {
             var zoomChanged = true;
@@ -243,6 +249,22 @@ class LMap {
         _initialCenter = center;
         _initialTopLeftPoint = _getNewTopLeftPoint(center, zoom);
 
+        _tileLayersToLoad = _tileLayersNum;
+
+        var loading = _loaded;
+        _loaded = true;
+
+        if (loading) {
+            events.dispatchEvent(new Event('load'));
+            for (layer in _layers) {
+                _layerAdd(layer);
+            }
+        }
+
+        events.dispatchEvent(new Event('viewreset'));
+        events.dispatchEvent(new Event('move'));
+        events.dispatchEvent(new Event('zoomend'));
+        events.dispatchEvent(new Event('moveend'));
 
     }
 
@@ -262,11 +284,11 @@ class LMap {
     }
 
 
-    public function project (latlng, ?zoom) {
+    public function project (latlng:LatLng, ?zoom):Point {
         if (zoom == null) {
             zoom = this._zoom;
         }
-        return _crs.latLngToPoint(L.latLng(latlng), _zoom);
+        return _crs.latLngToPoint(L.latLng(latlng), zoom);
     }
 
     public function unproject (point, ?zoom) {
@@ -281,18 +303,21 @@ class LMap {
         return unproject(point);
     }
 
-    public function latLngToLayerPoint (latlng){
-        var projectedPoint = project(L.latLng(latlng))._round();
+    public function latLngToLayerPoint (latlng:LatLng) {
+        var projectedPoint = project(L.latLng(latlng))
+        ._round();
         return projectedPoint;
     }
 
-    public function layerPointToContainerPoint (point:Point) {
-        return L.point(point).subtract(_getMapPanePos());
+    public function layerPointToContainerPoint (point:Point):Point {
+        var localPoint = L.point(point);
+        return localPoint.subtract(_getMapPanePos());
     }
 
-    public function latLngToContainerPoint (latlng) {
-        return layerPointToContainerPoint(latLngToLayerPoint(
-            L.latLng(latlng)));
+    public function latLngToContainerPoint (latlng:LatLng):Point {
+        var layerPoint = latLngToLayerPoint(L.latLng(latlng));
+        var jan = layerPointToContainerPoint(layerPoint);
+        return jan;
     }
 
     public function containerPointToLatLng (point) {
