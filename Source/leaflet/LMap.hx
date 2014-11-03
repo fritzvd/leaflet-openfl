@@ -59,12 +59,12 @@ class LMap {
     }
 
     public function zoomIn (delta) {
-        if (delta == null) { delta = 1; }
+        if (delta == 0) { delta = 1; }
         return setZoom(_zoom + (delta));
     }
 
     public function zoomOut (delta) {
-        if (delta == null) { delta = 1; }
+        if (delta == 0) { delta = 1; }
         return setZoom(_zoom - (delta));
     }
 
