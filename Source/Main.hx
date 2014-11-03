@@ -1,8 +1,5 @@
 package;
 
-// import com.haxepunk.HXP;
-// import com.haxepunk.Engine;
-
 import openfl.display.Sprite;
 import openfl.system.Capabilities;
 import leaflet.Leaflet;
