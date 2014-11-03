@@ -7,6 +7,5 @@ import openfl.events.EventDispatcher;
 class Events extends EventDispatcher {
     public function new () {
         super();
-        trace(this);
     }
 }

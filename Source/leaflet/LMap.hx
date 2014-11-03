@@ -11,7 +11,7 @@ import leaflet.crs.Simple;
 import openfl.events.Event;
 
 class LMap {
-    private var events:Events; 
+    private var events:Events;
     private var _layers:Map<String, Dynamic>;
     private var _lastId:Int;
     private var _zoom:Int;
@@ -26,6 +26,8 @@ class LMap {
     private var _initialTopLeftPoint:Point;
     private var _initialCenter:LatLng;
     private var _sprite:Sprite;
+    private var _tileLayersNum:Int = 0;
+    private var _tileLayersToLoad:Int;
 
     public function new (sprite, ?crs:Dynamic) {
         _sprite = sprite;
@@ -36,8 +38,8 @@ class LMap {
             _crs = crs;
         }
         _size = new Point (sprite.stage.stageHeight, sprite.stage.stageWidth);
-        trace(_size);
         _initialCenter = new LatLng(0,0);
+        _zoom = 8;
     }
 
     public function setView (center:LatLng, ?zoom) {
@@ -133,19 +135,19 @@ class LMap {
         return panTo(newCenter);
     }
 
-    public function addLayer (layer) {
-        var id = Util.stamp(layer, _lastId);
-        if (_layers[Std.string(id)] != null) { return this; }
+    // public function addLayer (layer) {
+    //     var id = Util.stamp(layer, _lastId);
+    //     if (_layers[Std.string(id)] != null) { return this; }
 
-        _layers[Std.string(id)] = layer;
+    //     _layers[Std.string(id)] = layer;
 
-        // if (layer.options)
-        if (_loaded) {
-            // _layerAdd(layer);
-        }
+    //     // if (layer.options)
+    //     if (_loaded) {
+    //         // _layerAdd(layer);
+    //     }
 
-        return this;
-    }
+    //     return this;
+    // }
 
     public function removeLayer (layer) {
         var id = Std.string(Util.stamp(layer, _lastId));
@@ -234,6 +236,10 @@ class LMap {
         return _panes;
     }
 
+    public function _layerAdd (layer:Dynamic) {
+        //
+    }
+
     public function _resetView (center, zoom) {
         if (zoom != _zoom) {
             var zoomChanged = true;
@@ -243,6 +249,22 @@ class LMap {
         _initialCenter = center;
         _initialTopLeftPoint = _getNewTopLeftPoint(center, zoom);
 
+        _tileLayersToLoad = _tileLayersNum;
+
+        var loading = _loaded;
+        _loaded = true;
+
+        if (loading) {
+            events.dispatchEvent(new Event('load'));
+            for (layer in _layers) {
+                _layerAdd(layer);
+            }
+        }
+
+        events.dispatchEvent(new Event('viewreset'));
+        events.dispatchEvent(new Event('move'));
+        events.dispatchEvent(new Event('zoomend'));
+        events.dispatchEvent(new Event('moveend'));
 
     }
 
@@ -262,11 +284,11 @@ class LMap {
     }
 
 
-    public function project (latlng, ?zoom) {
+    public function project (latlng:LatLng, ?zoom):Point {
         if (zoom == null) {
             zoom = this._zoom;
         }
-        return _crs.latLngToPoint(L.latLng(latlng), _zoom);
+        return _crs.latLngToPoint(L.latLng(latlng), zoom);
     }
 
     public function unproject (point, ?zoom) {
@@ -281,18 +303,21 @@ class LMap {
         return unproject(point);
     }
 
-    public function latLngToLayerPoint (latlng){
-        var projectedPoint = project(L.latLng(latlng))._round();
+    public function latLngToLayerPoint (latlng:LatLng) {
+        var projectedPoint = project(L.latLng(latlng))
+        ._round();
         return projectedPoint;
     }
 
-    public function layerPointToContainerPoint (point:Point) {
-        return L.point(point).subtract(_getMapPanePos());
+    public function layerPointToContainerPoint (point:Point):Point {
+        var localPoint = L.point(point);
+        return localPoint.subtract(_getMapPanePos());
     }
 
-    public function latLngToContainerPoint (latlng) {
-        return layerPointToContainerPoint(latLngToLayerPoint(
-            L.latLng(latlng)));
+    public function latLngToContainerPoint (latlng:LatLng):Point {
+        var layerPoint = latLngToLayerPoint(L.latLng(latlng));
+        var jan = layerPointToContainerPoint(layerPoint);
+        return jan;
     }
 
     public function containerPointToLatLng (point) {
@@ -313,4 +338,26 @@ class LMap {
         return project(center, zoom)._subtract(viewHalf)._round();
     }
 
+    public function _initContainer () {
+
+        // sprite.add
+    }
+
+    public function addLayer (url) {
+        // var loader = new haxe.Http(url);
+        var loader  =  new openfl.display.Loader();
+        // loader.request();
+        loader.load( new openfl.net.URLRequest(url));
+        loader.addEventListener(Event.COMPLETE, jean);
+        // loader.??
+        // loader.onData(jean);
+    }
+
+    public function jean (data:Event) {
+        // var bitdata = new openfl.display.BitmapData(3, 5);c
+        var bit = cast(data.currentTarget.content, openfl.display.Bitmap);
+        
+        trace(bit);
+        _sprite.addChild(bit);
+    }
 }
