@@ -11,7 +11,7 @@ import leaflet.crs.Simple;
 import openfl.events.Event;
 
 class LMap {
-    private var events:Events; 
+    private var events:Events;
     private var _layers:Map<String, Dynamic>;
     private var _lastId:Int;
     private var _zoom:Int;
@@ -135,19 +135,19 @@ class LMap {
         return panTo(newCenter);
     }
 
-    public function addLayer (layer) {
-        var id = Util.stamp(layer, _lastId);
-        if (_layers[Std.string(id)] != null) { return this; }
+    // public function addLayer (layer) {
+    //     var id = Util.stamp(layer, _lastId);
+    //     if (_layers[Std.string(id)] != null) { return this; }
 
-        _layers[Std.string(id)] = layer;
+    //     _layers[Std.string(id)] = layer;
 
-        // if (layer.options)
-        if (_loaded) {
-            // _layerAdd(layer);
-        }
+    //     // if (layer.options)
+    //     if (_loaded) {
+    //         // _layerAdd(layer);
+    //     }
 
-        return this;
-    }
+    //     return this;
+    // }
 
     public function removeLayer (layer) {
         var id = Std.string(Util.stamp(layer, _lastId));
@@ -338,4 +338,26 @@ class LMap {
         return project(center, zoom)._subtract(viewHalf)._round();
     }
 
+    public function _initContainer () {
+
+        // sprite.add
+    }
+
+    public function addLayer (url) {
+        // var loader = new haxe.Http(url);
+        var loader  =  new openfl.display.Loader();
+        // loader.request();
+        loader.load( new openfl.net.URLRequest(url));
+        loader.addEventListener(Event.COMPLETE, jean);
+        // loader.??
+        // loader.onData(jean);
+    }
+
+    public function jean (data:Event) {
+        // var bitdata = new openfl.display.BitmapData(3, 5);c
+        var bit = cast(data.currentTarget.content, openfl.display.Bitmap);
+        
+        trace(bit);
+        _sprite.addChild(bit);
+    }
 }

@@ -24,6 +24,7 @@ class Main extends Sprite {
 		var lC = new Point(3.5, 6.0);
 		// trace(lB.intersects(lB));
 		var mappo = new LMap(this);
+		mappo.addLayer('http://localhost:8001/demmetje.png');
         // L.point([1,2]);
 	}
 
