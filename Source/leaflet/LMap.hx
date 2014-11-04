@@ -344,20 +344,15 @@ class LMap {
     }
 
     public function addLayer (url) {
-        // var loader = new haxe.Http(url);
-        var loader  =  new openfl.display.Loader();
-        // loader.request();
-        loader.load( new openfl.net.URLRequest(url));
-        loader.addEventListener(Event.COMPLETE, jean);
-        // loader.??
-        // loader.onData(jean);
-    }
+    /*    var loader  =  new flash.display.Loader();*/
+        //loader.contentLoaderInfo.addEventListener(Event.COMPLETE, jean);
+        //loader.load( new flash.net.URLRequest(url));
+    //}
 
-    public function jean (data:Event) {
-        // var bitdata = new openfl.display.BitmapData(3, 5);c
-        var bit = cast(data.currentTarget.content, openfl.display.Bitmap);
+    //public function jean (data:Event) {
+        //// var bitdata = new openfl.display.BitmapData(3, 5);c
+        //var bit = cast(data.currentTarget.content, openfl.display.Bitmap);
         
-        trace(bit);
-        _sprite.addChild(bit);
+        /*_sprite.addChild(bit);*/
     }
 }
