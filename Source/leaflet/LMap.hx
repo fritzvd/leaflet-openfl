@@ -135,19 +135,19 @@ class LMap {
         return panTo(newCenter);
     }
 
-    // public function addLayer (layer) {
-    //     var id = Util.stamp(layer, _lastId);
-    //     if (_layers[Std.string(id)] != null) { return this; }
+     public function addLayer (layer:Dynamic) {
+         //var id = Util.stamp(layer, _lastId);
+         //if (_layers[Std.string(id)] != null) { return this; }
 
-    //     _layers[Std.string(id)] = layer;
+         //_layers[Std.string(id)] = layer;
 
-    //     // if (layer.options)
-    //     if (_loaded) {
-    //         // _layerAdd(layer);
-    //     }
+         // if (layer.options)
+         //if (_loaded) {
+              _layerAdd(layer);
+         //}
 
-    //     return this;
-    // }
+         return this;
+     }
 
     public function removeLayer (layer) {
         var id = Std.string(Util.stamp(layer, _lastId));
@@ -234,10 +234,6 @@ class LMap {
 
     public function getPanes () {
         return _panes;
-    }
-
-    public function _layerAdd (layer:Dynamic) {
-        //
     }
 
     public function _resetView (center, zoom) {
@@ -343,7 +339,7 @@ class LMap {
         // sprite.add
     }
 
-    public function addLayer (url) {
+    public function _layerAdd (layer:Dynamic) {
     /*    var loader  =  new flash.display.Loader();*/
         //loader.contentLoaderInfo.addEventListener(Event.COMPLETE, jean);
         //loader.load( new flash.net.URLRequest(url));
@@ -352,7 +348,7 @@ class LMap {
     //public function jean (data:Event) {
         //// var bitdata = new openfl.display.BitmapData(3, 5);c
         //var bit = cast(data.currentTarget.content, openfl.display.Bitmap);
-        
-        /*_sprite.addChild(bit);*/
+        trace(layer);
+        _sprite.addChild(layer);
     }
 }

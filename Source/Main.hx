@@ -7,6 +7,7 @@ import leaflet.Point;
 import leaflet.Bounds;
 import leaflet.Projection;
 import leaflet.LMap;
+import leaflet.TileLayer;
 
 class Main extends Sprite {
 	
@@ -14,14 +15,13 @@ class Main extends Sprite {
 	public function new () {
 		
 		super ();
-		trace(stage.stageWidth, stage.stageHeight);
-		trace(Capabilities.screenResolutionX, Capabilities.screenResolutionY, stage);
 		var l = new L();
 		var lB = new Bounds([new Point(3.0,4.0), new Point(5.0, 9.0)]);
 		var lC = new Point(3.5, 6.0);
 		// trace(lB.intersects(lB));
 		var mappo = new LMap(this);
-		mappo.addLayer('http://localhost:8000/screen.png');
+        var layer = new TileLayer('http://localhost:8000/screen.png');
+		mappo.addLayer(layer);
         // L.point([1,2]);
 	}
 
