@@ -348,7 +348,7 @@ class LMap {
     //public function jean (data:Event) {
         //// var bitdata = new openfl.display.BitmapData(3, 5);c
         //var bit = cast(data.currentTarget.content, openfl.display.Bitmap);
-        trace(layer);
+        layer._map = this;
         _sprite.addChild(layer);
     }
 }

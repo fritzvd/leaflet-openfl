@@ -21,7 +21,8 @@ class Main extends Sprite {
 		// trace(lB.intersects(lB));
 		var mappo = new LMap(this);
         var layer = new TileLayer('http://localhost:8000/screen.png');
-		mappo.addLayer(layer);
+        //layer.addTo(mappo);
+        mappo.addLayer(layer);
         // L.point([1,2]);
 	}
 
