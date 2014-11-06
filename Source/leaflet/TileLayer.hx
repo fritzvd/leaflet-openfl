@@ -44,7 +44,11 @@ class TileLayer extends Sprite {
        var topleft = _map._getNewTopLeftPoint(center, zoom);
        trace(topleft);
 
-
+       // n = 2 ^ zoom
+       /*       xtile = n * ((lon_deg + 180) / 360)*/
+       //ytile = n * (1 - (log(tan(lat_rad) + sec(lat_rad)) / π)) / 2
+       var n = Math.pow(2, zoom);
+       //var x = n * ((cente
 
        trace(center);
        
