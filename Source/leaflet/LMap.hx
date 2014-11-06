@@ -312,8 +312,8 @@ class LMap {
 
     public function latLngToContainerPoint (latlng:LatLng):Point {
         var layerPoint = latLngToLayerPoint(L.latLng(latlng));
-        var jan = layerPointToContainerPoint(layerPoint);
-        return jan;
+        var latlngPoint = layerPointToContainerPoint(layerPoint);
+        return latlngPoint;
     }
 
     public function containerPointToLatLng (point) {
@@ -349,6 +349,7 @@ class LMap {
         //// var bitdata = new openfl.display.BitmapData(3, 5);c
         //var bit = cast(data.currentTarget.content, openfl.display.Bitmap);
         layer._map = this;
+        layer.events.dispatchEvent(new Event('added'));
         _sprite.addChild(layer);
     }
 }

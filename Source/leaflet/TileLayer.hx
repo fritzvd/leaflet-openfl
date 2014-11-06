@@ -10,24 +10,55 @@ import openfl.net.URLRequest;
 class TileLayer extends Sprite {
     private var _url:String;
     public var _map:LMap;
+    public var events:Events;
 
     public function new (url ) {
         super();
+        events = new Events();
+        events.addEventListener('added', update);
+
         _url = url;
-        this.update(_url);
     }
 
     public function addTo (map) {
         this._map = map;
         this._map.addLayer(this);
+        events.dispatchEvent(new Event('added'));
+
         return this;
     }
 
+    public function getZoom() {
+        return _map.getZoom();
+
+    }
     public function getCenter() {
-        return this._map.getCenter();
+        return _map.getCenter();
     }
 
-    public whichTiles(
+    public function whichTiles () {
+       var center = getCenter();
+       
+       var zoom = getZoom();
+       trace(stage);
+       var topleft = _map._getNewTopLeftPoint(center, zoom);
+       trace(topleft);
+
+
+
+       trace(center);
+       
+       //getPixelBounds, zoom,gettilesize
+
+
+       var jan:Array<Dynamic> = [];
+       return jan;
+    }
+
+    public function update (?e:Event) {
+        var queue:Array<Dynamic> = this.whichTiles();
+        
+    }
 
     public function getTile (tile, tilePoint) {
       // tiles in queue calculated how many and where.   
