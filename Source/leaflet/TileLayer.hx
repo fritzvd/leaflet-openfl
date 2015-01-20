@@ -48,7 +48,8 @@ class TileLayer extends Sprite {
        /*       xtile = n * ((lon_deg + 180) / 360)*/
        //ytile = n * (1 - (log(tan(lat_rad) + sec(lat_rad)) / π)) / 2
        var n = Math.pow(2, zoom);
-       //var x = n * ((cente
+       //var x = n * ((center.lon + 180) / 360);
+       //var y = n * (1 - (Math.log(Math.tan(center.lat) + center.lat)) / Math.pi) / 2;
 
        trace(center);
        
